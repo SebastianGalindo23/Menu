@@ -2,518 +2,192 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Campestre Grill House — Menú</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#120F0D;
-    --char:#1D1712;
-    --char-2:#241C15;
-    --fire:#C4291B;
-    --ember:#E8631A;
+    --ink:#0F0D0C;
+    --char:#1A1512;
     --gold:#E3A83B;
+    --fire:#C4291B;
     --cream:#F4ECDD;
-    --muted:#C9BBA4;
+    --muted:#B7A98F;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
+  html,body{
     background:var(--ink);
     color:var(--cream);
-    font-family:'Archivo', sans-serif;
-    line-height:1.5;
-  }
-  a{color:inherit;}
-  .mono{font-family:'IBM Plex Mono', monospace;}
-  .wrap{max-width:980px;margin:0 auto;padding:0 24px;}
-  h1,h2,h3{font-family:'Anton', sans-serif;font-weight:400;letter-spacing:0.01em;text-transform:uppercase;}
-
-  button:focus-visible, a:focus-visible{
-    outline:3px solid var(--ember);
-    outline-offset:3px;
-  }
-
-  /* ---------- HERO ---------- */
-  .hero{
-    position:relative;
-    min-height:78vh;
-    display:flex;
-    align-items:flex-end;
-    background:#000 url('assets/portada.jpg') center 30%/cover no-repeat;
-  }
-  .hero::after{
-    content:'';
-    position:absolute;inset:0;
-    background:linear-gradient(180deg, rgba(10,8,7,0.25) 0%, rgba(10,8,7,0.55) 55%, var(--ink) 100%);
-  }
-  .hero-inner{
-    position:relative;z-index:2;
+    font-family:-apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     width:100%;
-    padding:56px 24px 40px;
-    max-width:980px;margin:0 auto;
-    display:flex;justify-content:space-between;align-items:flex-end;
-    flex-wrap:wrap;gap:20px;
+    overflow-x:hidden;
   }
-  .hero-eyebrow{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:0.78rem;letter-spacing:0.18em;text-transform:uppercase;
-    color:var(--gold);margin-bottom:14px;
-  }
-  .hero h1{
-    font-size:clamp(2.6rem, 7vw, 4.6rem);
-    color:var(--cream);
-    line-height:0.95;
-  }
-  .hero-tag{
-    font-size:0.95rem;color:var(--muted);max-width:34ch;margin-top:12px;
-  }
-  .hero-social{
-    display:flex;gap:14px;align-items:center;
-    font-family:'IBM Plex Mono',monospace;font-size:0.8rem;color:var(--muted);
-  }
-  .hero-social a{
-    display:inline-flex;align-items:center;justify-content:center;
-    width:38px;height:38px;border:1px solid rgba(244,236,221,0.35);
-    border-radius:50%;color:var(--cream);font-size:0.9rem;
-  }
+  button{font-family:inherit;}
+  button:focus-visible{outline:3px solid var(--fire);outline-offset:2px;}
 
-  /* ---------- GRATE DIVIDER (signature element) ---------- */
-  .grate{
-    height:14px;
-    background:repeating-linear-gradient(
-      90deg,
-      var(--gold) 0px, var(--gold) 26px,
-      var(--ink) 26px, var(--ink) 40px
-    );
-    opacity:0.9;
-  }
+  .screen{display:none;}
+  .screen.active{display:block;}
 
-  /* ---------- TABS ---------- */
-  .tabs-bar{
-    position:sticky;top:0;z-index:40;
-    background:var(--ink);
-    border-bottom:1px solid rgba(244,236,221,0.12);
+  /* ---------- HOME / PORTADA ---------- */
+  #screen-home{
+    position:relative;
+    max-width:520px;
+    margin:0 auto;
   }
-  .tabs{
-    display:flex;gap:4px;
-    max-width:980px;margin:0 auto;padding:0 24px;
-    overflow-x:auto;
+  #screen-home img{
+    display:block;width:100%;height:auto;
   }
-  .tab-btn{
-    background:none;border:none;
-    color:var(--muted);
-    font-family:'Anton',sans-serif;font-size:1rem;letter-spacing:0.02em;
-    text-transform:uppercase;
-    padding:20px 22px 16px;
+  .hotspot{
+    position:absolute;
+    background:rgba(0,0,0,0);
+    border:none;
     cursor:pointer;
-    border-bottom:3px solid transparent;
-    white-space:nowrap;
-    transition:color .2s ease, border-color .2s ease;
+    -webkit-tap-highlight-color:transparent;
   }
-  .tab-btn:hover{color:var(--cream);}
-  .tab-btn.active{
-    color:var(--gold);
-    border-bottom-color:var(--fire);
+  /* Coordenadas aproximadas basadas en la imagen 900x1600 */
+  .hotspot-desayuno{
+    left:2.7%;  top:68.6%;
+    width:41%;  height:5.9%;
   }
+  .hotspot-almuerzo{
+    left:61%;   top:68.6%;
+    width:36%;  height:5.9%;
+  }
+  .hotspot:active{background:rgba(227,168,59,0.18);border-radius:40px;}
 
-  /* ---------- SECTIONS ---------- */
-  .panel{display:none;padding:64px 0 100px;}
-  .panel.active{display:block;}
-
-  .panel-head{
-    text-align:center;margin-bottom:56px;
+  /* ---------- VISOR DE MENÚ ---------- */
+  #screen-desayuno, #screen-almuerzo{
+    min-height:100vh;
+    padding-top:64px;
   }
-  .panel-head h2{
-    font-size:clamp(2.2rem,5vw,3.2rem);color:var(--cream);
-  }
-  .panel-head p{
-    color:var(--muted);font-size:0.95rem;max-width:46ch;margin:14px auto 0;
-  }
-
-  .category{margin-bottom:56px;}
-  .category-title{
-    display:flex;align-items:center;gap:14px;
-    margin-bottom:22px;
-  }
-  .category-title h3{
-    font-size:1.5rem;color:var(--ember);white-space:nowrap;
-  }
-  .category-title .line{
-    height:1px;flex:1;background:rgba(244,236,221,0.18);
-  }
-
-  .dish-grid{
-    display:grid;grid-template-columns:1fr 1fr;gap:0 40px;
-  }
-  .dish{
-    padding:18px 0;
-    border-bottom:1px solid rgba(244,236,221,0.1);
-  }
-  .dish-top{
-    display:flex;justify-content:space-between;align-items:baseline;gap:12px;
-  }
-  .dish-name{font-family:'Archivo',sans-serif;font-weight:700;font-size:1.05rem;color:var(--cream);}
-  .dish-price{
-    font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--gold);
-    font-size:1rem;white-space:nowrap;
-  }
-  .dish-desc{
-    font-size:0.88rem;color:var(--muted);margin-top:6px;
-    max-width:44ch;
-  }
-
-  .footnote{
+  .topbar{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
     background:var(--char);
-    border-left:3px solid var(--gold);
-    padding:22px 26px;
-    margin-top:16px;
-    font-size:0.9rem;color:var(--muted);
+    border-bottom:1px solid rgba(244,236,221,0.15);
+    padding:12px 16px;
   }
-  .footnote strong{color:var(--cream);}
+  .topbar .title{
+    font-weight:700;color:var(--gold);font-size:0.95rem;
+  }
+  .home-btn{
+    display:flex;align-items:center;gap:6px;
+    background:var(--fire);color:var(--cream);
+    border:none;border-radius:20px;
+    padding:8px 16px;font-size:0.85rem;font-weight:700;
+    cursor:pointer;
+  }
+  .home-btn:hover{background:#a82116;}
 
-  /* Copas table */
-  .copas-table{
-    width:100%;border-collapse:collapse;font-size:0.92rem;
+  .pages{
+    max-width:760px;margin:0 auto;
+    display:flex;flex-direction:column;gap:24px;
+    padding:20px 14px 70px;
   }
-  .copas-table th{
-    font-family:'IBM Plex Mono',monospace;font-size:0.72rem;letter-spacing:0.08em;
-    text-transform:uppercase;color:var(--gold);
-    text-align:right;padding:10px 8px;
-    border-bottom:1px solid rgba(244,236,221,0.2);
+  .zoom-wrap{
+    border-radius:10px;
+    overflow:auto;
+    box-shadow:0 12px 32px rgba(0,0,0,0.45);
+    background:#000;
+    -webkit-overflow-scrolling:touch;
   }
-  .copas-table th:first-child{text-align:left;}
-  .copas-table td{
-    padding:12px 8px;border-bottom:1px solid rgba(244,236,221,0.08);
-    text-align:right;font-family:'IBM Plex Mono',monospace;color:var(--muted);
+  .zoom-wrap img{
+    display:block;
+    width:100%;
+    height:auto;
+    cursor:zoom-in;
+    transition:width .25s ease;
   }
-  .copas-table td:first-child{
-    text-align:left;font-family:'Archivo',sans-serif;color:var(--cream);font-weight:600;
+  .zoom-wrap.zoomed{
+    overflow:auto;
+  }
+  .zoom-wrap.zoomed img{
+    width:220%;
+    max-width:none;
+    cursor:zoom-out;
+  }
+  .zoom-hint{
+    text-align:center;font-size:0.75rem;color:var(--muted);
+    margin:-10px 0 6px;
   }
 
-  /* ---------- FOOTER ---------- */
   footer{
     background:var(--char);
-    padding:56px 0 32px;
-    text-align:center;
+    padding:32px 0;text-align:center;
     border-top:1px solid rgba(244,236,221,0.1);
   }
-  footer .thanks{
-    font-family:'Anton',sans-serif;font-size:1.6rem;color:var(--gold);
-    text-transform:uppercase;margin-bottom:10px;
-  }
-  footer .meta{
-    font-family:'IBM Plex Mono',monospace;font-size:0.75rem;color:var(--muted);
-  }
-
-  @media (max-width:640px){
-    .dish-grid{grid-template-columns:1fr;}
-    .hero{min-height:64vh;}
-    .hero-inner{flex-direction:column;align-items:flex-start;}
-  }
+  footer .thanks{font-size:1.05rem;font-weight:700;color:var(--gold);margin-bottom:6px;}
+  footer .meta{font-size:0.78rem;color:var(--muted);}
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="hero-inner">
-    <div>
-      <div class="hero-eyebrow">/CampestreGrillHouse</div>
-      <h1>Campestre<br>Grill House</h1>
-      <p class="hero-tag">Carnes a la brasa, mariscos y buena mesa. Escoge tu menú abajo: desayuno, almuerzo o bebidas y extras.</p>
-    </div>
-    <div class="hero-social">
-      <a href="#" aria-label="Facebook">f</a>
-      <a href="#" aria-label="Instagram">ig</a>
-      <a href="#" aria-label="TikTok">tt</a>
-    </div>
+<!-- ============ PORTADA ============ -->
+<section class="screen active" id="screen-home">
+  <img src="assets/portada.jpg" alt="Campestre Grill House — Menús">
+  <button class="hotspot hotspot-desayuno" aria-label="Ver menú de desayuno y cena" onclick="showScreen('desayuno')"></button>
+  <button class="hotspot hotspot-almuerzo" aria-label="Ver menú de almuerzo" onclick="showScreen('almuerzo')"></button>
+</section>
+
+<!-- ============ DESAYUNO ============ -->
+<section class="screen" id="screen-desayuno">
+  <div class="topbar">
+    <span class="title">Desayuno &amp; Cena</span>
+    <button class="home-btn" onclick="showScreen('home')">⌂ Inicio</button>
   </div>
-</header>
-
-<div class="grate"></div>
-
-<nav class="tabs-bar">
-  <div class="tabs" role="tablist" aria-label="Secciones del menú">
-    <button class="tab-btn active" data-tab="desayuno" role="tab" aria-selected="true">Desayuno &amp; Cena</button>
-    <button class="tab-btn" data-tab="almuerzo" role="tab" aria-selected="false">Almuerzo</button>
-    <button class="tab-btn" data-tab="bebidas" role="tab" aria-selected="false">Bebidas &amp; Extras</button>
+  <div class="pages">
+    <p class="zoom-hint">Toca una página para hacer zoom</p>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/desayuno/pagina-1.jpg" alt="Menú de desayunos - página 1" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/desayuno/pagina-2.jpg" alt="Menú de desayunos - página 2" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/desayuno/pagina-3.jpg" alt="Menú de desayunos - página 3" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/desayuno/pagina-4.jpg" alt="Bebidas y extras" loading="lazy"></div>
   </div>
-</nav>
+  <footer>
+    <div class="thanks">«Gracias por elegirnos»</div>
+    <div class="meta">Campestre Grill House · /CampestreGrillHouse</div>
+  </footer>
+</section>
 
-<main class="wrap">
-
-  <!-- ============ DESAYUNO ============ -->
-  <section class="panel active" id="panel-desayuno">
-    <div class="panel-head">
-      <h2>Desayuno &amp; Cena</h2>
-      <p>Todos nuestros desayunos incluyen un herraje, café o té de manzanilla.</p>
-    </div>
-
-    <div class="category">
-      <div class="category-title"><h3>Fuertes</h3><div class="line"></div></div>
-      <div class="dish-grid" id="grid-desayuno-fuertes"></div>
-    </div>
-
-    <div class="category">
-      <div class="category-title"><h3>Ligeros &amp; especiales</h3><div class="line"></div></div>
-      <div class="dish-grid" id="grid-desayuno-ligeros"></div>
-    </div>
-
-    <div class="category">
-      <div class="category-title"><h3>Panes, hotcakes &amp; extras dulces</h3><div class="line"></div></div>
-      <div class="dish-grid" id="grid-desayuno-panes"></div>
-    </div>
-
-    <div class="category">
-      <div class="category-title"><h3>Infantil</h3><div class="line"></div></div>
-      <div class="dish-grid" id="grid-desayuno-infantil"></div>
-    </div>
-
-    <div class="footnote">
-      <strong>Nota:</strong> el cambio de guarniciones o extras tiene un costo adicional.
-    </div>
-  </section>
-
-  <!-- ============ ALMUERZO ============ -->
-  <section class="panel" id="panel-almuerzo">
-    <div class="panel-head">
-      <h2>Almuerzo</h2>
-      <p>Parrilladas, churrascos, mariscos y más — servido de mediodía en adelante.</p>
-    </div>
-
-    <div class="category"><div class="category-title"><h3>Entradas</h3><div class="line"></div></div><div class="dish-grid" id="grid-almuerzo-entradas"></div></div>
-    <div class="category"><div class="category-title"><h3>Parrilladas</h3><div class="line"></div></div><div class="dish-grid" id="grid-almuerzo-parrilladas"></div>
-      <div class="footnote">Nuestras parrilladas son servidas con 2 guarniciones del día, sopa de entrada, y pan con ajo o tortillas.</div>
-    </div>
-    <div class="category"><div class="category-title"><h3>Asado personal &amp; premium</h3><div class="line"></div></div><div class="dish-grid" id="grid-almuerzo-asado"></div></div>
-    <div class="category"><div class="category-title"><h3>Churrascos &amp; tablazo</h3><div class="line"></div></div><div class="dish-grid" id="grid-almuerzo-churrascos"></div></div>
-    <div class="category"><div class="category-title"><h3>Mariscos</h3><div class="line"></div></div><div class="dish-grid" id="grid-almuerzo-mariscos"></div></div>
-    <div class="category"><div class="category-title"><h3>Hamburguesas</h3><div class="line"></div></div><div class="dish-grid" id="grid-almuerzo-hamburguesas"></div>
-      <div class="footnote">Todas las hamburguesas incluyen una orden de papas fritas.</div>
-    </div>
-    <div class="category"><div class="category-title"><h3>Panes con carne</h3><div class="line"></div></div><div class="dish-grid" id="grid-almuerzo-panes"></div></div>
-    <div class="category"><div class="category-title"><h3>Antojitos &amp; postres</h3><div class="line"></div></div><div class="dish-grid" id="grid-almuerzo-antojitos"></div></div>
-  </section>
-
-  <!-- ============ BEBIDAS Y EXTRAS ============ -->
-  <section class="panel" id="panel-bebidas">
-    <div class="panel-head">
-      <h2>Bebidas &amp; Extras</h2>
-      <p>Bebidas, copas y acompañamientos disponibles en cualquier horario.</p>
-    </div>
-
-    <div class="category"><div class="category-title"><h3>Bebidas</h3><div class="line"></div></div><div class="dish-grid" id="grid-bebidas-bebidas"></div></div>
-
-    <div class="category">
-      <div class="category-title"><h3>Copas</h3><div class="line"></div></div>
-      <table class="copas-table">
-        <thead><tr><th>Copa</th><th>Mediana</th><th>Grande</th><th>Pichel</th></tr></thead>
-        <tbody id="tabla-copas"></tbody>
-      </table>
-    </div>
-
-    <div class="category"><div class="category-title"><h3>Extras</h3><div class="line"></div></div><div class="dish-grid" id="grid-bebidas-extras"></div></div>
-  </section>
-
-</main>
-
-<footer>
-  <div class="thanks">«Gracias por elegirnos»</div>
-  <div class="meta">Campestre Grill House · /CampestreGrillHouse</div>
-</footer>
+<!-- ============ ALMUERZO ============ -->
+<section class="screen" id="screen-almuerzo">
+  <div class="topbar">
+    <span class="title">Almuerzo</span>
+    <button class="home-btn" onclick="showScreen('home')">⌂ Inicio</button>
+  </div>
+  <div class="pages">
+    <p class="zoom-hint">Toca una página para hacer zoom</p>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-02.jpg" alt="Entradas" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-04.jpg" alt="Parrilladas" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-05.jpg" alt="Asado personal" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-06.jpg" alt="Asado premium" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-07.jpg" alt="Arrechera" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-08.jpg" alt="Mar y tierra" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-09.jpg" alt="Churrascos y tablazo" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-10.jpg" alt="Mariscos" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-11.jpg" alt="Hamburguesas" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-12.jpg" alt="Hamburguesas" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-13.jpg" alt="Panes con carne" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-14.jpg" alt="Antojitos y postres" loading="lazy"></div>
+    <div class="zoom-wrap" onclick="toggleZoom(this)"><img src="assets/almuerzo/pagina-15.jpg" alt="Bebidas y copas" loading="lazy"></div>
+  </div>
+  <footer>
+    <div class="thanks">«Gracias por elegirnos»</div>
+    <div class="meta">Campestre Grill House · /CampestreGrillHouse</div>
+  </footer>
+</section>
 
 <script>
-// ---------- DATA ----------
-const desayunoFuertes = [
-  ["Vaquero","Incluye entrada (avena con leche). Huevos estrellados o revueltos, puyazo importado, chorizo, frijoles, salsa, dos plátanos fritos, crema, pan simple o tortilla.","Q85"],
-  ["Finquero","Huevos estrellados o revueltos, carne adobada, frijoles, fruta, salsa, dos plátanos fritos, crema, pan simple o tortilla.","Q65"],
-  ["Salvadoreño","Huevos estrellados o revueltos, frijoles, dos plátanos fritos, crema, dos pupusas, salsa, pan simple o tortilla.","Q59"],
-  ["Campestre","Huevos estrellados o revueltos, dos dobladas de queso, dos panqueques con miel, longaniza, jamón, salsa, pan simple o tortilla.","Q55"],
-  ["Sanluqueño","Huevos revueltos con chorizo molido, dos plátanos fritos, crema, frijoles, panqueque de elote, salsa, pan simple o tortilla.","Q55"],
-  ["Ranchero","Huevos estrellados bañados en salsa ranchera, frijoles, dos dobladas de queso, tres plátanos fritos, crema, pan simple o tortilla.","Q45"],
-  ["Americano","Huevos estrellados o revueltos, hashbrown, tocino, dos panqueques con miel, salsa, pan simple o tortilla.","Q45"],
-  ["Clásico","Huevos estrellados o revueltos, salchicha, frijoles, dos plátanos fritos, salsa, crema, pan simple o tortilla.","Q42"],
-];
-const desayunoLigeros = [
-  ["Omelette al gusto","Un ingrediente a elección (jamón, champiñones, tocino o pollo), queso mozzarella, sobre cama de frijoles y chips, pan simple o tortilla.","Q55"],
-  ["Saludable","Huevos duros sobre pan integral con lascas de aguacate, yogurt, fruta de temporada, jugo de naranja Rabinal y café.","Q55"],
-  ["Chilaquiles","Huevos estrellados con lascas de aguacate, sobre nachos y salsa verde.","Q45"],
-  ["Plato de fruta","Fruta de temporada con yogurt, granola y miel.","Q49"],
-  ["Bowl de cereal","—","Q25"],
-  ["Avena con leche","—","Q20"],
-];
-const desayunoPanes = [
-  ["Muffin de huevo","Huevo estrellado con torta de chorizo y queso gratinado. Incluye hashbrown y jugo de naranja Rabinal.","Q36"],
-  ["Chapata de desayuno","Pan chapata con huevos al gusto, jamón, tocino, queso mozzarella. Incluye café.","Q44"],
-  ["Hotcakes","Cuatro panqueques con mermelada de la casa, fruta y café (incluye refill).","Q40"],
-  ["Hashbrowns","Tres porciones con salsa dulce y mayonesa.","Q30"],
-];
-const desayunoInfantil = [
-  ["Infantil","Un huevo estrellado o revuelto con dos mini panqueques, fruta, miel, salsa y jugo de naranja Rabinal 8 oz.","Q—"],
-];
-
-const almuerzoEntradas = [
-  ["Alambre de chorizo","Queso fundido con chorizo molido, pan con ajo o nachos.","Q50"],
-  ["Tortillas con queso fundido","Tortillas doradas en comal con queso mozzarella y cebollín.","Q25"],
-  ["Pillows o Mozza mía","Almohadillas rellenas de queso mozzarella.","Q25"],
-  ["Nachos","Carne molida, guacamole, pico de gallo, aderezo cheddar, crema y jalapeño.","Q35"],
-  ["Sampling de tostadas","Una tostada de frijol, una de salsa y una de guacamole.","Q30"],
-  ["Flautas rellenas de papa","Tres flautas con papa, repollo y salsa.","Q30"],
-  ["Tortillas con carne","Carne de res o adobado con tortillas doradas, guacamole, chirmol y cebollín.","Q49"],
-];
-const almuerzoParrilladas = [
-  ["La Chispuda","Para 2 personas — 4 oz puyazo, 4 oz lomito, 4 oz adobado, 1 chorizo, 1 longaniza, salsa picante, cebollines asados y chirmol.","Q225"],
-  ["La Chapina","Para 4 personas — 1/2 lb puyazo, 1/2 lb lomito, 1/2 lb adobado, 2 chorizos, 2 longanizas, salsa picante, cebollines asados y chirmol.","Q530"],
-  ["La Sanluqueña","Para 6 personas — 1 lb puyazo, 1 lb lomito, 1 lb adobado, 3 chorizos, 3 longanizas, salsa picante, cebollines asados y chirmol.","Q650"],
-];
-const almuerzoAsado = [
-  ["Asado personal 8 oz","Puyazo, servido con longaniza artesanal, dos guarniciones del día y un acompañamiento.","Q120"],
-  ["Asado personal 12 oz","Puyazo, servido con longaniza artesanal, dos guarniciones del día y un acompañamiento.","Q185"],
-  ["Mixto puyazo–adobado","4 oz de cada uno, con longaniza artesanal y guarniciones.","Q115"],
-  ["Asado premium","8 oz a elegir: tiras de carne, lomito o New York. Con guacamole, gallo pinto y longaniza.","Q160"],
-  ["Arrechera","Servida con tostones, guacamole y frijol.","Q125"],
-  ["Mar y tierra","8 oz de puyazo o lomito con seis camarones al ajillo, guacamole, papa frita, picante y chirmol.","Q195"],
-];
-const almuerzoChurrascos = [
-  ["Churrasco de puyazo","Con tres guarniciones del día y un acompañamiento.","Q79"],
-  ["Churrasco de lomito","Con tres guarniciones del día y un acompañamiento.","Q85"],
-  ["Mixto adobado–adobado","Con tres guarniciones del día y un acompañamiento.","Q85"],
-  ["Mixto res manita–adobado","Con tres guarniciones del día y un acompañamiento.","Q90"],
-  ["Doble carne de res manita","Con tres guarniciones del día y un acompañamiento.","Q95"],
-  ["Tablazo de chorizo","1/2 libra de chorizo argentino o longaniza, con guacamole, cebollines, chirmol y tortillas con chimichurri.","Q50"],
-  ["Tablazo mixto","1/2 libra chorizo argentino + 1/2 libra longaniza.","Q70"],
-];
-const almuerzoMariscos = [
-  ["Canastas de plátano mar y tierra","No incluye guarnición.","Q95"],
-  ["Mojarra al ajillo o frita","Con guacamole, arroz, papas fritas y un acompañamiento.","Q90"],
-  ["6 camarones al ajillo","Con guacamole, arroz, papas fritas y un acompañamiento.","Q80"],
-  ["6 camarones empanizados","Con guacamole, arroz, papas fritas y un acompañamiento.","Q85"],
-  ["Ceviche grande","—","Q89"],
-  ["Mariscada en salsa de crema","Incluye arroz.","Q135"],
-  ["Crema de mariscos","Incluye arroz y tostones.","Q115"],
-];
-const almuerzoHamburguesas = [
-  ["Torito","Torta de res artesanal, pan tostado a la plancha, aderezo de la casa, huevo, tocino, queso cheddar, lechuga, tomate y cebolla.","Q59"],
-  ["Tejana","Doble torta de res con BBQ, aros de cebolla, jalapeño, tocino, queso cheddar y lechuga.","Q69"],
-  ["Puyazo","Torta de puyazo con champiñones salteados, lechuga, cebolla y queso mozzarella.","Q69"],
-  ["Clásica","Torta de res artesanal con queso cheddar, lechuga, tomate y cebolla.","Q49"],
-  ["Pollo Crispy","Filete de pollo empanizado, queso cheddar, cebolla y lechuga.","Q59"],
-  ["Campestre Pretzel","Torta de res en pan pretzel con queso cheddar, mozzarella, cebolla, aguacate y espinaca.","Q69"],
-];
-const almuerzoPanes = [
-  ["Adobado o pollo","Pan chapata relleno de pollo o adobado a la plancha con queso mozzarella fundido.","Q55"],
-  ["Puyazo o lomito","Pan chapata relleno de lomito o puyazo a la plancha con queso mozzarella fundido.","Q65"],
-];
-const almuerzoAntojitos = [
-  ["Rellenitos de frijol dulce","—","Q20"],
-  ["Plátanos fritos con crema","—","Q20"],
-  ["Mole de plátanos","—","Q25"],
-  ["Tostada de guacamole","—","Q10"],
-  ["Tostada de frijol","—","Q10"],
-  ["Flauta rellena de papa","—","Q12"],
-  ["Torreja","Por temporada.","Q25"],
-  ["Crepa bananos–Nutella","Agrega helado por Q10.","Q35"],
-  ["Crepa fresa–Nutella","Agrega helado por Q10.","Q35"],
-  ["Crepa melocotón–Nutella","Agrega helado por Q10.","Q35"],
-];
-
-const bebidas = [
-  ["Té","—","Q5"],["Leche entera","—","Q5"],["Leche descremada","—","Q7"],
-  ["Taza de leche","—","Q15"],["Café","—","Q12"],["Gaseosas","—","Q10"],
-  ["Chocolate de Xela","—","Q15"],["Chocolate de Xela con leche","—","Q20"],
-  ["Licuado mixto","—","Q18"],["Licuados con leche","—","Q20"],
-  ["Licuado mixto con leche","—","Q25"],["Licuado con leche deslactosada","—","Q27"],
-  ["Capuccino","—","Q25"],
-];
-const copas = [
-  ["Limonada","Q15","Q20","Q68"],
-  ["Limonada Rosa","Q20","Q28","Q75"],
-  ["Limonada con hierbabuena","Q20","Q28","Q75"],
-  ["Maracuyá","Q20","Q28","Q75"],
-  ["Horchata","Q20","Q28","Q75"],
-  ["Rosa de Jamaica","Q15","Q20","Q68"],
-  ["Naranjada con soda","—","Q30","—"],
-  ["Limonada con soda","—","Q27","—"],
-  ["Cimarrona","—","Q27","—"],
-  ["Jugo de naranja","Q25","—","—"],
-];
-const extras = [
-  ["Champiñones","Q5"],["Pupusa (unidad)","Q10"],["Frijol","Q8"],
-  ["Tamalitos de chipilín","Q8"],["Tamal simple","Q3"],["Tortilla","Q1"],
-  ["Pan con ajo","Q5"],["Pan con mantequilla","Q5"],["Dos dobladas de queso","Q12"],
-  ["Guacamole","Q8"],["Tortillas gratinadas","Q15"],["Plátanos","Q10"],
-  ["Crema","Q2"],["Salsa","Q5"],["Chirmol","Q5"],["Jamón","Q5"],
-  ["Tomate y cebolla","Q5"],["Tocino","Q8"],["Longaniza","Q10"],
-  ["Chorizo molido","Q10"],["Salsa dulce","Q5"],["Mayonesa","Q5"],
-  ["Porción de huevo","Q12"],["Huevo (unidad)","Q6"],["Nutella","Q8"],["Miel","Q2"],
-];
-
-// ---------- RENDER ----------
-function renderDishGrid(containerId, items){
-  const el = document.getElementById(containerId);
-  el.innerHTML = items.map(([name, desc, price]) => `
-    <div class="dish">
-      <div class="dish-top">
-        <span class="dish-name">${name}</span>
-        <span class="dish-price mono">${price}</span>
-      </div>
-      ${desc && desc !== "—" ? `<div class="dish-desc">${desc}</div>` : ""}
-    </div>
-  `).join("");
-}
-
-function renderExtras(containerId, items){
-  const el = document.getElementById(containerId);
-  el.innerHTML = items.map(([name, price]) => `
-    <div class="dish">
-      <div class="dish-top">
-        <span class="dish-name">${name}</span>
-        <span class="dish-price mono">${price}</span>
-      </div>
-    </div>
-  `).join("");
-}
-
-function renderCopas(){
-  const el = document.getElementById("tabla-copas");
-  el.innerHTML = copas.map(([name, m, g, p]) => `
-    <tr><td>${name}</td><td>${m}</td><td>${g}</td><td>${p}</td></tr>
-  `).join("");
-}
-
-renderDishGrid("grid-desayuno-fuertes", desayunoFuertes);
-renderDishGrid("grid-desayuno-ligeros", desayunoLigeros);
-renderDishGrid("grid-desayuno-panes", desayunoPanes);
-renderDishGrid("grid-desayuno-infantil", desayunoInfantil);
-
-renderDishGrid("grid-almuerzo-entradas", almuerzoEntradas);
-renderDishGrid("grid-almuerzo-parrilladas", almuerzoParrilladas);
-renderDishGrid("grid-almuerzo-asado", almuerzoAsado);
-renderDishGrid("grid-almuerzo-churrascos", almuerzoChurrascos);
-renderDishGrid("grid-almuerzo-mariscos", almuerzoMariscos);
-renderDishGrid("grid-almuerzo-hamburguesas", almuerzoHamburguesas);
-renderDishGrid("grid-almuerzo-panes", almuerzoPanes);
-renderDishGrid("grid-almuerzo-antojitos", almuerzoAntojitos);
-
-renderExtras("grid-bebidas-bebidas", bebidas);
-renderExtras("grid-bebidas-extras", extras);
-renderCopas();
-
-// ---------- TABS ----------
-const tabButtons = document.querySelectorAll(".tab-btn");
-const panels = document.querySelectorAll(".panel");
-tabButtons.forEach(btn => {
-  btn.addEventListener("click", () => {
-    tabButtons.forEach(b => { b.classList.remove("active"); b.setAttribute("aria-selected","false"); });
-    panels.forEach(p => p.classList.remove("active"));
-    btn.classList.add("active");
-    btn.setAttribute("aria-selected","true");
-    document.getElementById(`panel-${btn.dataset.tab}`).classList.add("active");
-    window.scrollTo({top: document.querySelector(".tabs-bar").offsetTop - 1, behavior:"smooth"});
-  });
-});
+  function showScreen(name){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+    window.scrollTo({top:0, behavior:'instant'});
+  }
+  function toggleZoom(wrap){
+    wrap.classList.toggle('zoomed');
+    if(!wrap.classList.contains('zoomed')){
+      wrap.scrollLeft = 0;
+      wrap.scrollTop = 0;
+    }
+  }
 </script>
 
 </body>
